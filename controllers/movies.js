@@ -44,14 +44,14 @@ const createMovies = (req, res, next) => {
 
 const deleteMovies = (req, res, next) => {
   moviesModel
-    .findById(req.params.cardId)
+    .findById(req.params.movieId)
     .orFail(() => {
       throw new DocumentNotFoundError('Запрашиваемая карточка не найдена');
     })
     // eslint-disable-next-line consistent-return
     .then((card) => {
       if (req.user._id.toString() === card.owner.toString()) {
-        return moviesModel.findByIdAndRemove(req.params.cardId);
+        return moviesModel.findByIdAndRemove(req.params.movieId);
       }
       throw new DeletionError('Нет прав для удаления карточки');
     })
