@@ -13,10 +13,10 @@ const {
 const BedRequest = require('../utils/errors/BedRequest'); // 400
 const DeletionError = require('../utils/errors/DeletionError'); // 403
 const DocumentNotFoundError = require('../utils/errors/DocumentNotFoundError'); // 404
-
+/* */
 const getMovies = (req, res, next) => {
   moviesModel
-    .find({})
+    .find({ owner: req.user._id })
     .then((cards) => {
       res.send(cards);
     })
