@@ -8,7 +8,6 @@ const moviesModel = require('../models/movie');
 const {
   // eslint-disable-next-line max-len
   HTTP_STATUS_CREATED,
-  HTTP_STATUS_OK,
 } = http2.constants;
 
 const BedRequest = require('../utils/errors/BedRequest'); // 400
@@ -68,7 +67,6 @@ const deleteMovies = (req, res, next) => {
       } else { next(err); }
     });
 };
-
 
 module.exports = {
   getMovies,

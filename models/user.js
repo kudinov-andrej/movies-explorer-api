@@ -22,7 +22,7 @@ const userSchema = new mongoose.Schema({
     required: true,
     minlength: 2,
     maxLength: 30,
-  }
+  },
 });
 
 userSchema.index({ email: 1 }, { unique: true });
