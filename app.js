@@ -16,8 +16,8 @@ const app = express();
 app.use(cors());
 
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // за 15 минут
-  max: 100, // можно совершить максимум 100 запросов с одного IP
+  windowMs: 15 * 60 * 1000, // 15 минут
+  max: 350, // 100 запросов с одного IP
 });
 
 app.use(express.json());
