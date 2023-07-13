@@ -59,27 +59,33 @@ const crateUser = (req, res, next) => {
 
 const updateUser = (req, res, next) => {
   const { name, email } = req.body;
-  usersModel
-    .findByIdAndUpdate(req.user._id, { name, email }, { new: true, runValidators: true })
-    // eslint-disable-next-line consistent-return
-    .then((user) => {
-      if (!user) {
-        throw new DocumentNotFoundError('Запрашиваемый пользователь не найден');
+  usersModel.findOne({ email })
+    .then((existingUser) => {
+      if (existingUser && existingUser._id.toString() !== req.user._id.toString()) {
+        throw new ConflictingRequest('Пользователь с такой почтой уже существует');
       }
-      res.status(HTTP_STATUS_OK).send({
-        id: user.id,
-        name,
-        email,
-      });
+      return usersModel
+        .findByIdAndUpdate(req.user._id, { name, email }, { new: true, runValidators: true })
+        .then((user) => {
+          if (!user) {
+            throw new DocumentNotFoundError('Запрашиваемый пользователь не найден');
+          }
+          res.status(HTTP_STATUS_OK).send({
+            id: user.id,
+            name,
+            email,
+          });
+        });
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        next(new BedRequest('Данные для создания карточки переданы не корректно'));
+        next(new BedRequest('Данные для создания карточки переданы некорректно'));
       } else {
         next(err);
       }
     });
 };
+
 
 const login = (req, res, next) => {
   const { email, password } = req.body;
